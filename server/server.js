@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
+import userRouter from './routes/user.route.js'
 import connectDB from './config/db.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -17,7 +18,7 @@ app.use(cors(
         credentials: true
     }
 ))
-
+app.use('/api/user', userRouter)
 
 app.get('/', (req, res) => {
     res.send("server is working")
