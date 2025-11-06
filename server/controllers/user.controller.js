@@ -39,7 +39,7 @@ export const register = async (req, res) => {
       name,
       email,
       password: hashedPasword,
-      profileImage
+      profileImage: profileImage || ""
     })
 
     return res.status(201).json({

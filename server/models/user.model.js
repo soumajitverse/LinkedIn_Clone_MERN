@@ -22,7 +22,9 @@ let userSchema = new mongoose.Schema({
         type: String,
         default: '',
     }
-}, { timestamps: true })
+},
+    { timestamps: true }
+)
 
 let User = mongoose.models.User || mongoose.model('User', userSchema)
 export default User

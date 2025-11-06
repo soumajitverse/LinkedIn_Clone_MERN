@@ -5,6 +5,7 @@ import userRouter from './routes/user.route.js'
 import connectDB from './config/db.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import postRouter from './routes/post.route.js'
 
 let port = process.env.PORT || 4000
 let app = express()
@@ -19,6 +20,7 @@ app.use(cors(
     }
 ))
 app.use('/api/user', userRouter)
+app.use('/api/post', postRouter)
 
 app.get('/', (req, res) => {
     res.send("server is working")
