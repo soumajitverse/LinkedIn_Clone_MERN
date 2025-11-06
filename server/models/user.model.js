@@ -16,7 +16,11 @@ let userSchema = new mongoose.Schema({
     },
     profileImage: {
         type: String,
-        required: false
+        default: ''
+    },
+    bio: {
+        type: String,
+        default: '',
     }
 }, { timestamps: true })
 
