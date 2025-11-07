@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import postRouter from './routes/post.route.js'
 import likeRouter from './routes/like.route.js'
+import commentRouter from './routes/comment.route.js'
 
 let port = process.env.PORT || 4000
 let app = express()
@@ -23,6 +24,7 @@ app.use(cors(
 app.use('/api/user', userRouter)
 app.use('/api/post', postRouter)
 app.use('/api/like', likeRouter)
+app.use('/api/comment', commentRouter)
 
 app.get('/', (req, res) => {
     res.send("server is working")
