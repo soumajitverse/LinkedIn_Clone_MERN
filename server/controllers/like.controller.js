@@ -36,7 +36,7 @@ export const toggleLike = async (req, res) => {
             action = "unliked";
         } else {
             // like: create like record & increment count
-            await Like.create({ user: userId, post: postId });
+            const like = await Like.create({ user: userId, post: postId });
             updatedPost = await Post.findByIdAndUpdate(
                 postId,
                 { $inc: { likes: 1 } },

@@ -15,6 +15,6 @@ const likeSechma = new mongoose.Schema({
     { timestamps: true }
 )
 
-const Like = mongoose.models.Post || mongoose.model('Like', likeSechma);
+const Like = mongoose.models.Like || mongoose.model('Like', likeSechma);
 
 export default Like;

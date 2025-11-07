@@ -5,8 +5,8 @@ import { createComment, deleteComment, editComment, getAllComments } from '../co
 let commentRouter = express.Router()
 
 commentRouter.post('/add', isUserAuth, createComment)
-commentRouter.get('/specific-post', isUserAuth, getAllComments)
+commentRouter.post('/specific-post', isUserAuth, getAllComments)
 commentRouter.put('/edit', isUserAuth, editComment)
-commentRouter.put('/delete', isUserAuth, deleteComment)
+commentRouter.delete('/delete', isUserAuth, deleteComment)
 
 export default commentRouter

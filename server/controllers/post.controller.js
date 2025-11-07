@@ -1,5 +1,7 @@
 import uploadOnCloudinary from '../config/cloudinary.js'
 import Post from '../models/post.model.js';
+import Like from "../models/like.model.js";
+import Comment from "../models/comment.model.js";
 
 // create post : /api/post/create-post
 export const createPost = async (req, res) => {
@@ -81,41 +83,51 @@ export const editPost = async (req, res) => {
 
 // delete post : /api/post/delete
 export const deletePost = async (req, res) => {
-    try {
-        const { postId, userId } = req.body;
-        const id = postId
+  try {
+    const { postId, userId } = req.body;
 
-        const post = await Post.findOne({ $and: [{ _id: { $eq: id } }, { user: { $eq: userId } }] })
-
-        if (!post) {
-            return res.status(404).json({
-                success: false,
-                message: "You can delete your own post only"
-            });
-        }
-
-        const deletedPost = await Post.findByIdAndDelete(id);
-
-        if (!deletedPost) {
-            return res.status(404).json({
-                success: false,
-                message: "Post not found."
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            message: "Post deleted successfully!"
-        });
-    } catch (error) {
-        console.error("Error deleting post:", error);
-        res.status(500).json({
-            success: true,
-            message: "Internal server error"
-        });
+    if (!postId || !userId) {
+      return res.status(400).json({
+        success: false,
+        message: "Post ID and User ID are required",
+      });
     }
-};
 
+    const post = await Post.findOne({
+      $and: [{ _id: { $eq: postId } }, { user: { $eq: userId } }],
+    });
+
+    if (!post) {
+      return res.status(403).json({
+        success: false,
+        message: "You can delete your own post only",
+      });
+    }
+
+    await Like.deleteMany({ post: postId });
+    await Comment.deleteMany({ post: postId });
+
+    const deletedPost = await Post.findByIdAndDelete(postId);
+
+    if (!deletedPost) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Post deleted successfully!",
+    });
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
 // get all post : /api/post/
 export const getAllPosts = async (req, res) => {
     try {

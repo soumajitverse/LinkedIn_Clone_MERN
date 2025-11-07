@@ -117,9 +117,7 @@ export const editComment = async (req, res) => {
 // delete comment : /api/comment/delete
 export const deleteComment = async (req, res) => {
     try {
-        const { commentId } = req.params;
-        const { userId } = req.body;
-
+        const { userId, commentId } = req.body;
         const comment = await Comment.findById(commentId);
 
         if (!comment) {
