@@ -13,6 +13,14 @@ const postSechma = new mongoose.Schema({
     image_url: {
         type: String,
         default: ''
+    },
+    likes: {
+        type: Number,
+        default: 0
+    },
+    comments: {
+        type: Number,
+        default: 0
     }
 },
     { timestamps: true }
