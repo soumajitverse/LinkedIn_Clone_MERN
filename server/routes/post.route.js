@@ -7,7 +7,7 @@ let postRouter = express.Router()
 
 postRouter.post('/create-post', isUserAuth, createPost, upload.single("image_url"))
 postRouter.put('/edit', isUserAuth, editPost)
-postRouter.post('/delete', isUserAuth, deletePost)
+postRouter.delete('/delete', isUserAuth, deletePost)
 postRouter.get('/', isUserAuth, getAllPosts)
 postRouter.get('/my-post', isUserAuth, getUserPosts)
 

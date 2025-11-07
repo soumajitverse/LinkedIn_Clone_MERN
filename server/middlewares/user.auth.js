@@ -13,7 +13,6 @@ const isUserAuth = async (req, res, next) => {
         const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET)
         if (tokenDecoded.id) {
             req.body = { ...req.body, userId: tokenDecoded.id }
-            console.log(req.body.userId)
         }
         else {
             return res.status(401).json({

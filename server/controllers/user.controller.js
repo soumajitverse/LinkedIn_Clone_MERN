@@ -153,3 +153,45 @@ export const isAuth = async (req, res) => {
     })
   }
 }
+
+// edit profile : /api/user/edit
+export const modify = async (req, res) => {
+  try {
+    const { userId, name, bio, profileImage } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (name) user.name = name;
+    if (bio) user.bio = bio;
+    if (profileImage) user.profileImage = profileImage;
+
+    await user.save();
+
+    const updatedUser = await User.findById(userId).select("-password");
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};

@@ -42,7 +42,16 @@ export const createPost = async (req, res) => {
 // edit post : /api/post/edit
 export const editPost = async (req, res) => {
     try {
-        const { content, id } = req.body;
+        const { content, postId, userId } = req.body;
+        const id = postId
+        const post = await Post.findOne({ $and: [{ _id: { $eq: id } }, { user: { $eq: userId } }] })
+
+        if (!post) {
+            return res.status(404).json({
+                success: false,
+                message: "You can edit your own post only"
+            });
+        }
 
         const updatedPost = await Post.findByIdAndUpdate(
             id, { content },
@@ -73,7 +82,17 @@ export const editPost = async (req, res) => {
 // delete post : /api/post/delete
 export const deletePost = async (req, res) => {
     try {
-        const { id } = req.body;
+        const { postId, userId } = req.body;
+        const id = postId
+
+        const post = await Post.findOne({ $and: [{ _id: { $eq: id } }, { user: { $eq: userId } }] })
+
+        if (!post) {
+            return res.status(404).json({
+                success: false,
+                message: "You can delete your own post only"
+            });
+        }
 
         const deletedPost = await Post.findByIdAndDelete(id);
 
@@ -121,33 +140,33 @@ export const getAllPosts = async (req, res) => {
 
 // get all posts by a specific user : /api/post/my-post
 export const getUserPosts = async (req, res) => {
-  try {
-    const { userId } = req.body
+    try {
+        const { userId } = req.body
 
-    const userPosts = await Post.find({ user: userId })
-      .populate("user", "name email image_url") 
-      .sort({ createdAt: -1 }); // newest first
+        const userPosts = await Post.find({ user: userId })
+            .populate("user", "name email image_url")
+            .sort({ createdAt: -1 }); // newest first
 
-    // If no posts found
-    if (userPosts.length === 0) {
-      return res.status(200).json({
-        success: false,
-        message: "you have not posted yet.",
-      });
+        // If no posts found
+        if (userPosts.length === 0) {
+            return res.status(200).json({
+                success: false,
+                message: "you have not posted yet.",
+            });
+        }
+
+        // Success
+        res.status(200).json({
+            success: true,
+            message: "User posts fetched successfully!",
+            count: userPosts.length,
+            posts: userPosts,
+        });
+    } catch (error) {
+        console.error("Error fetching user posts:", error);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
     }
-
-    // Success
-    res.status(200).json({
-      success: true,
-      message: "User posts fetched successfully!",
-      count: userPosts.length,
-      posts: userPosts,
-    });
-  } catch (error) {
-    console.error("Error fetching user posts:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
-  }
 };
