@@ -48,9 +48,7 @@ const PostCard = ({ post }) => {
     user,
     axios,
     fetchPosts,
-    fetchMyPosts,
-    showPostEdit,
-    setShowPostEdit
+    fetchMyPosts
   } = useAppContext()
 
   return (
@@ -97,10 +95,11 @@ const PostCard = ({ post }) => {
       <div className='flex flex-row justify-between px-2' >
         <div>like <span className='font-light text-sm'>{post.likes}</span></div>
         {user._id == post.user._id && (<div className='cursor-pointer text-blue-500 font-medium'
-          onClick={
-            () => {
-              setShowPostEdit(true)
-            }}
+        onClick={
+          () => {
+            
+  
+        }}
         >Edit</div>)}
         {user._id == post.user._id && (<div className='cursor-pointer text-red-600 font-medium'
           onClick={async () => {
