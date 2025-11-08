@@ -13,7 +13,8 @@ const Navbar = () => {
         setUser,
         setShowUserLogin,
         axios,
-        fetchUserStatus
+        setShowPostAdd,
+        showPostAdd,
     } = useAppContext()
 
     // function to logout
@@ -22,14 +23,11 @@ const Navbar = () => {
             const { data } = await axios.post('/api/user/logout')
             if (data.success) {
                 toast.success(data.message)
-                if (user === null) {
-                    fetchUserStatus()
-                }
-                setShowUserLogin(true)
                 navigate('/')
+                setUser(null)
+                setShowUserLogin(true)
             }
         } catch (error) {
-            console.log(error)
             toast.error('Something went wrong!')
         }
     }
@@ -41,16 +39,17 @@ const Navbar = () => {
                 <div className="text-primary font-bold text-2xl">ProNet</div>
             </NavLink>
 
-            <div className='font-medium'>
-                Welcome! {user.name}
-                {/* Welcome! {user.name} */}
+            <div className='font-medium text-xl'>
+                Hi, {user.name}
             </div>
 
             {/* Desktop Menu */}
             <div className="hidden sm:flex items-center gap-8">
-                <NavLink to='/add-post'>Add Post</NavLink>
+                <button onClick={() => {
+                    setShowPostAdd(true)
+                }} className='cursor-pointer'>Add Post</button>
                 <NavLink to='/'>Feed</NavLink>
-                <NavLink to='/net-work'>Net Work</NavLink>
+                <NavLink to='/net-work'>Friends</NavLink>
 
                 {/* login and logout*/}
                 {/* if user is logged in then it will show the logout button and if the user is not logged in then it will show the login button */}
@@ -64,7 +63,10 @@ const Navbar = () => {
                     </button>) :
                     (
                         <div className='relative group'>
-                            <img className='w-10' src={assets.profile_icon} alt="profile" />
+
+                            {
+                                user.profileImage ? <img className='w-10 h-10 rounded-3xl' src={user.profileImage} alt="profile" /> : <img className='w-10 h-10' src={assets.profile_icon} alt="profile" />
+                            }
 
                             <ul className='hidden group-hover:block absolute top-10 right-0 bg-white shadow border border-gray-200 py-2.5 w-30 rounded-md text-sm z-40'>
                                 <li
@@ -86,20 +88,22 @@ const Navbar = () => {
                 }
             </div>
 
-            {/* cart for mobile view*/}
             <div className='flex items-center sm:hidden'>
-                <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="sm:hidden">
-                    {/* Menu Icon SVG */}
-                    <img src={assets.menu_icon} alt="menu" />
+                <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="sm:hidden"> <img src={assets.menu_icon} alt="menu" />
                 </button>
             </div>
 
             {/* Mobile Menu */}
             {open && (<div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden z-50`}>
-
-                <NavLink to='/add-post' onClick={() => setOpen(false)}>Add Post</NavLink>
+                <NavLink to='/my-profile' onClick={() => setOpen(false)}>My Profile</NavLink>
+                <button onClick={
+                    () => {
+                        setOpen(false)
+                        setShowPostAdd(true)
+                    }
+                } className='cursor-pointer'>Add Post</button>
                 <NavLink to='/' onClick={() => setOpen(false)}>Feed</NavLink>
-                <NavLink to='/net-work' onClick={() => setOpen(false)}>Net Work</NavLink>
+                <NavLink to='/net-work' onClick={() => setOpen(false)}>Friends</NavLink>
                 <NavLink to='/my-post' onClick={() => setOpen(false)}>My Posts</NavLink>
 
                 {/* login and logout*/}
@@ -126,9 +130,9 @@ const Navbar = () => {
             </div>
             )}
 
-        </nav>
+        </nav >
     ) : (<nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative z-50 transition-all">
-        <div className="text-primary font-bold text-2xl">ProNet</div>
+        <div className="text-primary font-bold text-2xl cursor-pointer">ProNet</div>
     </nav>)
 }
 

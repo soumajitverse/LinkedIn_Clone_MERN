@@ -122,8 +122,10 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
   try {
     res.clearCookie("token") // clearing the cookie will delete the token so that user will be automatically logout
-    res.status(200).json({ message: "Logout successfully" })
-
+    res.status(200).json({
+      success: true,
+      message: "Logout successfully"
+    })
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -199,7 +201,6 @@ export const modify = async (req, res) => {
 export const getUsers = async (req, res) => {
   try {
     const { userId } = req.body;
-
     if (!userId) {
       return res.status(400).json({
         success: false,

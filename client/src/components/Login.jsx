@@ -30,13 +30,19 @@ const Login = () => {
                 if (state === 'login') {
                     toast.success("Logged in successfully")
                     fetchUserStatus() // add this for fetching real time cart data for user from DB
+                    navigate('/')
+                    setUser(data.user)
+                    setShowUserLogin(false)
                 }
                 else {
-                    toast.success("Signed up successfully")
+                    toast.success(data.message)
+                    setShowUserLogin(false)
+                    setTimeout(() => {
+                        setShowUserLogin(true)
+                        setState("login")
+                    }, 1000)
                 }
-                navigate('/')
-                setUser(data.user)
-                setShowUserLogin(false)
+
             }
 
         } catch (error) {
