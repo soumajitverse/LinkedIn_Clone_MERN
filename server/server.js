@@ -17,7 +17,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors(
     {
-        origin: process.env.ALLOWED_ORIGIN,
+        origin: "https://linked-in-clone-mern-git-main-soumajit-majumders-projects.vercel.app",
         credentials: true
     }
 ))
