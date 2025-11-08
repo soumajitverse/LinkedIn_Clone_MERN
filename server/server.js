@@ -17,7 +17,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors(
     {
-        origin: "https://linked-in-clone-mern-git-main-soumajit-majumders-projects.vercel.app",
+        origin: "https://linked-in-clone-mern.vercel.app/",
         credentials: true
     }
 ))
